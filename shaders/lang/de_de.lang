@@ -1,0 +1,97 @@
+# AeroDream v1.4 - Deutsch
+# Option labels and hover tips for Iris / OptiFine
+
+# Profile labels
+profile.BALANCED = Ausgeglichen - Aero-Alltag
+profile.DREAM = Traum - maximaler Glanz
+profile.PERFORMANCE = Leistung - besonders schnell
+profile.comment = Voreinstellungen fuer Reflexionen, Schatten, Bloom und Sonnenstrahlen.
+
+# Screen labels
+screen.ATMOSPHERE = Himmel & Atmosphaere
+screen.COLORS = Farben & Frische
+screen.LIGHT = Licht & Glanz
+screen.NATURE = Lebendiges Gruen
+screen.PERFORMANCE = Leistung & Details
+screen.SKY = Traumhafter Aero-Himmel
+screen.WATER = Kristallklares Wasser
+screen.WEATHER = Glanz nach Regen
+
+# Option labels
+option.AERO_CLOUDS = Weiche Wolken
+option.AERO_RAIN_RIPPLES = Regenwellen auf Wasser
+option.AERO_REFLECTIONS = Objektreflexionen
+option.AERO_REFRACTION = Lichtbrechung
+option.AERO_SATURATION = Farbsaettigung
+option.AERO_WIND = Sanfter Wind
+option.BLOOM_STRENGTH = Glanz / Bloom
+option.CAUSTIC_STRENGTH = Unterwasser-Lichtmuster
+option.CLOUD_DENSITY = Wolkendichte
+option.DEW_SPARKLE = Morgentau-Glanz
+option.EXPOSURE_ADAPT = Helligkeitsanpassung
+option.FOG_STRENGTH = Atmosphaerischer Nebel
+option.FOLIAGE_TRANSLUCENCY = Lichtdurchlaessige Blaetter
+option.GLASS_SHINE = Glas-Reflexe
+option.GREEN_VIBRANCE = Landschafts-Frische
+option.LENS_FLARE_STRENGTH = Sonnen-Linseneffekt
+option.NIGHT_BRIGHTNESS = Mondlicht-Helligkeit
+option.PASTEL_SUNSETS = Pastell-Sonnenuntergaenge
+option.REFLECTION_STEPS = Reflexionsqualitaet
+option.SHADOW_QUALITY = Schattenqualitaet
+option.SKY_FRESHNESS = Himmelsblau
+option.SUNRAY_SAMPLES = Sonnenstrahl-Qualitaet
+option.SUNRAY_STRENGTH = Sonnenstrahlen
+option.SURFACE_SHEEN = Glanz polierter Bloecke
+option.WATER_CLARITY = Wasserklarheit
+option.WATER_SPARKLE = Wasser-Schimmer
+option.WATER_WAVES = Wasserwellen
+option.WET_GLOSS = Glanz nach Regen
+option.WIND_STRENGTH = Windstaerke
+option.shadowDistance = Schatten-Distanz
+option.shadowMapResolution = Schatten-Aufloesung
+
+# Value labels
+value.SHADOW_QUALITY.0 = Aus
+value.SHADOW_QUALITY.1 = Schnell
+value.SHADOW_QUALITY.2 = Weich
+
+# Neu in v1.3 - Fresh Horizons
+option.AERO_CLOUD_SHADOWS = Wandernde Wolkenschatten
+option.CLOUD_SHADOW_STRENGTH = Wolkenschatten-Staerke
+option.MORNING_MIST = Frischer Morgennebel
+option.RAINBOW_STRENGTH = Regenbogen nach Regen
+option.AERO_DOUBLE_RAINBOW = Doppelter Regenbogen
+option.SHORE_TURQUOISE = Tuerkise Uferzonen
+option.SHORE_FOAM = Schaum am Ufer
+option.IRIDESCENCE = Perlmuttglanz auf Glas und Eis
+option.AERO_GLASS_SSR = Glas- und Eisreflexionen
+option.FXAA_QUALITY = Kantenglaettung (FXAA)
+option.AO_STRENGTH = Kontaktschatten
+value.FXAA_QUALITY.0 = Aus
+value.FXAA_QUALITY.1 = Schnell
+value.FXAA_QUALITY.2 = Hoch
+
+# AeroDream 1.4 - Crystal Life
+screen.CRYSTAL = Kristall-Details
+option.AERO_STYLE = Aero-Farbstil
+option.AERO_STYLE.comment = Unabhängig von der Qualitätsstufe: klassisch, tropisch oder sanfte Pastellfarben.
+value.AERO_STYLE.0 = Klassisches Aero
+value.AERO_STYLE.1 = Tropisches Aero
+value.AERO_STYLE.2 = Sanfter Traum
+option.BLUE_HOUR_STRENGTH = Blaue Stunde
+option.AERO_AURORA = Sanfte Polarlichter
+option.AURORA_STRENGTH = Polarlicht-Stärke
+option.BUBBLE_STRENGTH = Luftblasen unter Wasser
+option.BUBBLE_QUALITY = Luftblasen-Detail
+value.BUBBLE_QUALITY.0 = Aus
+value.BUBBLE_QUALITY.2 = Leicht
+value.BUBBLE_QUALITY.4 = Detailliert
+option.RIPPLE_QUALITY = Regentropfen-Ringe
+value.RIPPLE_QUALITY.0 = Aus
+value.RIPPLE_QUALITY.1 = Ausgewogen
+value.RIPPLE_QUALITY.2 = Detailliert
+option.RAIN_RING_STRENGTH = Regenring-Stärke
+option.AERO_WATERFALLS = Wasserfall-Schimmer
+option.WATERFALL_MAGIC = Wasserfall-Schaum
+option.CRYSTAL_ICE = Kristall-Eis
+option.SNOW_SPARKLE = Schnee-Glitzern

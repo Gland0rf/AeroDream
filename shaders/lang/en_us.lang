@@ -1,0 +1,148 @@
+# AeroDream v1.4 - English
+# Option labels and hover tips for Iris / OptiFine
+
+# Profile labels
+profile.BALANCED = balanced
+profile.DREAM = Dream
+profile.PERFORMANCE = Performance
+profile.comment = Adds animated cloud shadows, post-rain rainbows, shoreline color, FXAA.
+
+# Screen labels
+screen.ATMOSPHERE = Sky & Atmosphere
+screen.COLORS = Color & Freshness
+screen.LIGHT = Lighting & Shine
+screen.NATURE = Living Greenery
+screen.PERFORMANCE = Advanced Performance
+screen.SKY = Dreamy Aero Sky
+screen.WATER = Clear Blue Water
+screen.WEATHER = After-Rain Glow
+
+# Option labels
+option.AERO_CLOUDS = Soft Dreamy Clouds
+option.AERO_CLOUDS.comment = Procedural wispy white clouds instead of blocky vanilla clouds in the sky.
+option.AERO_RAIN_RIPPLES = Rain Ripple Detail
+option.AERO_RAIN_RIPPLES.comment = Fine moving ripples on the water surface during rain.
+option.AERO_REFLECTIONS = Reflect Nearby Objects
+option.AERO_REFLECTIONS.comment = Reflects visible buildings and terrain on water using ray marching.
+option.AERO_REFRACTION = Underwater Distortion
+option.AERO_REFRACTION.comment = Subtle refracted view of the blocks beneath water.
+option.AERO_SATURATION = Color Saturation
+option.AERO_SATURATION.comment = Overall color vibrancy; modest values preserve white clouds and clear glass.
+option.AERO_WIND = Breezy Leaves & Flowers
+option.AERO_WIND.comment = Gentle foliage movement synchronized with the shadow pass.
+option.BLOOM_STRENGTH = Glossy Glow
+option.BLOOM_STRENGTH.comment = Amount of dreamy soft glow from bright highlights.
+option.CAUSTIC_STRENGTH = Underwater Sun Caustics
+option.CAUSTIC_STRENGTH.comment = Animated light on the lakebed, including when viewed from above.
+option.CLOUD_DENSITY = Wispy Cloud Coverage
+option.CLOUD_DENSITY.comment = Amount of procedural white cloud cover. Disable clouds for more FPS.
+option.DEW_SPARKLE = Dew Drops
+option.DEW_SPARKLE.comment = Tiny, rare sunlight glints on grassy surfaces.
+option.EXPOSURE_ADAPT = Cave-Aware Exposure
+option.EXPOSURE_ADAPT.comment = Slight brightness increase while entering darker spaces; uses smoothed eye light.
+option.FOG_STRENGTH = Atmospheric Haze
+option.FOG_STRENGTH.comment = Subtle blue-tinted distance fog; zero disables extra distance fog.
+option.FOLIAGE_TRANSLUCENCY = Sunlit Foliage
+option.FOLIAGE_TRANSLUCENCY.comment = Soft backlighting on grass, flowers, and leaves. Helps thin plants glow in sunlight.
+option.GLASS_SHINE = Glass Gloss
+option.GLASS_SHINE.comment = Cyan Fresnel reflections and sun highlights on glass and panes.
+option.GREEN_VIBRANCE = Landscape Freshness
+option.GREEN_VIBRANCE.comment = Brightens green grass BLOCKS as well as plant blades and leaves without overriding biome tint.
+option.LENS_FLARE_STRENGTH = Aero Lens Flare
+option.LENS_FLARE_STRENGTH.comment = Small cyan and pink sun ghosts, hidden when terrain blocks the sun.
+option.NIGHT_BRIGHTNESS = Moonlight Brightness
+option.NIGHT_BRIGHTNESS.comment = Gently boosts the deep-blue night sky and outdoors moonlit terrain.
+option.PASTEL_SUNSETS = Pastel Sunsets
+option.PASTEL_SUNSETS.comment = Soft pink, peach and periwinkle near sunset and sunrise.
+option.REFLECTION_STEPS = Reflection Quality
+option.REFLECTION_STEPS.comment = Water surface SSR steps; reflections are limited to on-screen geometry.
+option.SHADOW_QUALITY = Shadow Softness
+option.SHADOW_QUALITY.comment = 0 off; 1 hard; 2 soft 3x3 filtered sunlight shadows.
+option.SKY_FRESHNESS = Blue Sky Freshness
+option.SKY_FRESHNESS.comment = Azure dome and crystal cyan horizon. Does not affect blocks.
+option.SUNRAY_SAMPLES = Sunbeam Quality
+option.SUNRAY_SAMPLES.comment = Samples used for sunbeams. 8 faster, 18 smoother and slower.
+option.SUNRAY_STRENGTH = Sunbeams
+option.SUNRAY_STRENGTH.comment = Screen-space god rays. Reduce for better performance.
+option.SURFACE_SHEEN = Polished Block Shine
+option.SURFACE_SHEEN.comment = Light-catching specular sheen on ice and selected polished blocks.
+option.WATER_CLARITY = Water Transparency
+option.WATER_CLARITY.comment = How strongly underwater terrain shows through the blue surface.
+option.WATER_SPARKLE = Water Shimmer
+option.WATER_SPARKLE.comment = Adds very fine, moving aqua light glints to water reflections.
+option.WATER_WAVES = Water Ripple Size
+option.WATER_WAVES.comment = Animated water normals. Zero gives a mirror-flat surface.
+option.WET_GLOSS = Rain-Washed Gloss
+option.WET_GLOSS.comment = Subtle sheen and droplets on outdoor surfaces while wet and after rain.
+option.WIND_STRENGTH = Wind Strength
+option.WIND_STRENGTH.comment = Amount of rooted breeze animation on grass, flowers, crops and leaves.
+option.shadowDistance = Shadow Distance
+option.shadowMapResolution = Shadow Resolution
+
+# Value labels
+value.SHADOW_QUALITY.0 = Off
+value.SHADOW_QUALITY.1 = Fast
+value.SHADOW_QUALITY.2 = Soft
+
+# New in v1.3 - Fresh Horizons
+option.AERO_CLOUD_SHADOWS = Moving Cloud Shadows
+option.AERO_CLOUD_SHADOWS.comment = Drifting shadows on sunlit terrain match the procedural clouds.
+option.CLOUD_SHADOW_STRENGTH = Cloud Shadow Depth
+option.CLOUD_SHADOW_STRENGTH.comment = Softness/depth of moving cloud cover across sunlit ground.
+option.MORNING_MIST = Fresh Morning Mist
+option.MORNING_MIST.comment = Pale blue distance mist near the start of a clear day.
+option.RAINBOW_STRENGTH = After-Rain Rainbow
+option.RAINBOW_STRENGTH.comment = Sun-opposite spectral bow visible as a wet sky clears; zero turns it off.
+option.AERO_DOUBLE_RAINBOW = Double Rainbow
+option.AERO_DOUBLE_RAINBOW.comment = A faint secondary rainbow appears outside the primary after rain.
+option.SHORE_TURQUOISE = Turquoise Shorelines
+option.SHORE_TURQUOISE.comment = Stronger bright aqua in shallow water; deep water stays blue.
+option.SHORE_FOAM = Shoreline Foam
+option.SHORE_FOAM.comment = Soft wave foam around blocks touching the water surface.
+option.IRIDESCENCE = Glass & Ice Iridescence
+option.IRIDESCENCE.comment = Subtle pearlescent rainbow colors at grazing angles on glass and ice.
+option.AERO_GLASS_SSR = Glass & Ice Reflections
+option.AERO_GLASS_SSR.comment = Optional screen-space environment reflections on glass and ice; costly.
+option.FXAA_QUALITY = Smooth Edges (FXAA)
+option.FXAA_QUALITY.comment = Post-process anti-aliasing for grass, glass, water and sky outlines.
+option.AO_STRENGTH = Contact Shading
+option.AO_STRENGTH.comment = Extra lightweight screen-space contact shadows around geometry.
+value.FXAA_QUALITY.0 = Off
+value.FXAA_QUALITY.1 = Fast
+value.FXAA_QUALITY.2 = Quality
+
+# AeroDream 1.4 - Crystal Life
+screen.CRYSTAL = Crystal Life Details
+option.AERO_STYLE = Aero Color Style
+option.AERO_STYLE.comment = Art direction independent of quality: Classic blue/green, Tropical turquoise, or Soft Dream pastels.
+value.AERO_STYLE.0 = Classic Aero
+value.AERO_STYLE.1 = Tropical Aero
+value.AERO_STYLE.2 = Soft Dream
+option.BLUE_HOUR_STRENGTH = Aero Blue Hour
+option.BLUE_HOUR_STRENGTH.comment = Crisp azure and lavender afterglow at dusk and just before dawn.
+option.AERO_AURORA = Gentle Night Auroras
+option.AERO_AURORA.comment = Optional blue-green curtains in the Overworld nighttime sky. Enabled by Dream preset.
+option.AURORA_STRENGTH = Aurora Glow
+option.AURORA_STRENGTH.comment = Intensity of the optional sky aurora. Does not light up blocks.
+option.BUBBLE_STRENGTH = Tiny Underwater Bubbles
+option.BUBBLE_STRENGTH.comment = Subtle procedural bubble rims visible only while submerged.
+option.BUBBLE_QUALITY = Bubble Detail
+option.BUBBLE_QUALITY.comment = Number of world-space bubble samples: 0 fastest, 4 richest.
+value.BUBBLE_QUALITY.0 = Off
+value.BUBBLE_QUALITY.2 = Light
+value.BUBBLE_QUALITY.4 = Detailed
+option.RIPPLE_QUALITY = Rain Ripple Detail
+option.RIPPLE_QUALITY.comment = Concentric rain drop rings: off, balanced 2x2, or detailed 3x3.
+value.RIPPLE_QUALITY.0 = Off
+value.RIPPLE_QUALITY.1 = Balanced
+value.RIPPLE_QUALITY.2 = Detailed
+option.RAIN_RING_STRENGTH = Rain Ring Strength
+option.RAIN_RING_STRENGTH.comment = Visibility of circular wavefronts during rainfall; needs rain ripples enabled.
+option.AERO_WATERFALLS = Waterfall Shimmer
+option.AERO_WATERFALLS.comment = Cascading streaks and soft foam on vertical water faces.
+option.WATERFALL_MAGIC = Waterfall Foam Strength
+option.WATERFALL_MAGIC.comment = Increase light-cyan streaks on waterfall curtains; this is a surface effect.
+option.CRYSTAL_ICE = Crystal Ice Highlights
+option.CRYSTAL_ICE.comment = Cool blue-white reflected light on ice and snowy terrain.
+option.SNOW_SPARKLE = Sunlit Snow Sparkles
+option.SNOW_SPARKLE.comment = Sparse sun-catching highlights on snow and powder snow blocks.
