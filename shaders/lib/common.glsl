@@ -2,6 +2,7 @@
 #define AERO_COMMON_GLSL
 
 #include "/lib/settings.glsl"
+#include "/lib/temporal_jitter.glsl"
 
 const float AERO_PI = 3.14159265359;
 
@@ -42,6 +43,9 @@ float aeroFbm(vec2 p) {
     }
     return v;
 }
+
+#include "/lib/environment.glsl"
+#include "/lib/night.glsl"
 
 // Wind-aligned cloud field sampled both by the sky and sunlit terrain.
 // Coordinate input is absolute world XZ at the shared 205-block cloud plane.
@@ -118,10 +122,16 @@ vec3 aeroMoonDir() {
     return -aeroSunDir();
 }
 
+#include "/lib/cloudvolume.glsl"
+
 // The optimistic Aero sky is a real world-direction gradient, not a texture.
 // Sunsets are intentionally pastel, while the noon dome is crisp cyan/azure.
 vec3 aeroSky(vec3 ray, vec3 sunDir, float time) {
     ray = normalize(ray);
+#if AERO_DIMENSION != 0
+    return aeroDimensionSky(ray, time);
+#endif
+    if (aeroOverworld() < 0.5) return fogColor;
     float height = aeroSat(ray.y * 0.82 + 0.12);
     float sunHeight = sunDir.y;
     float daylight = smoothstep(-0.18, 0.20, sunHeight);
@@ -135,6 +145,7 @@ vec3 aeroSky(vec3 ray, vec3 sunDir, float time) {
                                    vec3(0.035, 0.47, 0.95),
                                    vec3(0.30, 0.53, 0.84));
     vec3 daylightSky = mix(horizonBlue, zenithBlue, pow(height, 0.67));
+    daylightSky = aeroClimateTint(daylightSky);
     // Saturate the blues without dyeing the nearly-white horizon.
     daylightSky = mix(vec3(aeroLuma(daylightSky)), daylightSky, SKY_FRESHNESS);
     vec3 nightSky = mix(vec3(0.060, 0.125, 0.275),
@@ -164,7 +175,7 @@ vec3 aeroSky(vec3 ray, vec3 sunDir, float time) {
     sky = mix(sky, vec3(0.73, 0.91, 1.02),
               morning * horizon * 0.095);
 
-#ifdef AERO_CLOUDS
+#if defined(AERO_CLOUDS) && CLOUD_MODE == 0
     // Clouds are pinned to a real world-space layer: their projected shadows
     // can match the visible drifting cloud masses below.
     if (ray.y > 0.025 && cameraPosition.y < 203.0) {
@@ -190,8 +201,12 @@ vec3 aeroSky(vec3 ray, vec3 sunDir, float time) {
 
     float night = 1.0 - daylight;
     float lunar = max(dot(ray, -sunDir), 0.0);
-    float moonDisk = smoothstep(0.999932, 0.999975, lunar);
-    sky += vec3(0.66, 0.81, 1.0) * (moonDisk * 0.88 + pow(lunar, 200.0) * 0.11)
+    float moonDisk = aeroMoonDisk(ray, -sunDir);
+    float moonGlow = 1.0;
+#ifdef AERO_MOON_PHASES
+    moonGlow = 0.5 + 0.5 * cos(float(moonPhase) * (2.0 * AERO_PI / 8.0));
+#endif
+    sky += vec3(0.66, 0.81, 1.0) * (moonDisk * 0.88 + pow(lunar, 200.0) * 0.11 * moonGlow)
          * night * (1.0 - rainStrength * 0.70);
     // Tiny non-twinkling stars, fixed to world direction, never screen space.
     if (ray.y > 0.045 && night > 0.65) {
@@ -204,9 +219,13 @@ vec3 aeroSky(vec3 ray, vec3 sunDir, float time) {
              * night * (1.0 - rainStrength) * 0.58;
     }
 
+    sky += aeroShootingStar(ray, time) * night * (1.0 - rainStrength);
+
     vec3 overcast = mix(vec3(0.71, 0.81, 0.87), vec3(0.35, 0.52, 0.69),
                         pow(height, 0.49));
     sky = mix(sky, overcast, rainStrength * 0.74);
+    vec4 volume = aeroVolumeClouds(ray, sunDir, time, 4200.0);
+    sky = sky * (1.0 - volume.a) + volume.rgb;
     return max(sky, vec3(0.0));
 }
 

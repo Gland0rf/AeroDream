@@ -1,2 +1,3 @@
 #version 330 compatibility
-#include "/lib/gbuffer_vertex.glsl"
+#define AERO_DIMENSION 0
+#include "/program/gbuffers_block.vsh.glsl"

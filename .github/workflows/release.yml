@@ -17,17 +17,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Validate shaders before packaging
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y glslang-tools
+          python tools/build_entrypoints.py --check
+          python -m unittest discover -s tools -p 'test_*.py'
+          python tools/validate.py --compile
+
       - name: Build ZIP
         run: |
-          test -f shaders/shaders.properties
-          test -f shaders/gbuffers_terrain.fsh
-
-          mkdir -p dist
-
-          zip -r "dist/AeroDream-${GITHUB_REF_NAME}.zip" \
-            shaders readme.md LICENSE
-
-          unzip -t "dist/AeroDream-${GITHUB_REF_NAME}.zip"
+          python tools/package.py --output "dist/AeroDream-${GITHUB_REF_NAME}.zip"
 
       - name: Publish release
         uses: softprops/action-gh-release@v3

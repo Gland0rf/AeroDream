@@ -1,2 +1,3 @@
 #version 330 compatibility
-#include "/lib/fullscreen_vertex.glsl"
+#define AERO_DIMENSION 0
+#include "/program/deferred.vsh.glsl"

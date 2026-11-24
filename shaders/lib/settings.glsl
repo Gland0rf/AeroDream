@@ -1,8 +1,41 @@
 #ifndef AERO_SETTINGS_GLSL
 #define AERO_SETTINGS_GLSL
 
-// AeroDream 1.4 - Windows Vista / Frutiger Aero-inspired world lighting.
+// AeroDream - Windows Vista / Frutiger Aero-inspired world lighting.
 // All user-editable options are collected here for Iris and OptiFine menus.
+
+#ifndef AERO_DIMENSION
+#define AERO_DIMENSION 0
+#endif
+
+#define PUDDLE_STRENGTH 0.65 // [0.00 0.35 0.65 1.00] Rain pools on exposed horizontal terrain
+#define PUDDLE_QUALITY 1 // [0 1 2] Off, sky reflection, sky plus screen-space reflection
+#define BIOME_ATMOSPHERE 0.65 // [0.00 0.35 0.65 1.00] Smooth climate-aware air and horizon colors
+#define UNDERWATER_RAYS 0.50 // [0.00 0.25 0.50 0.80] Shadow-tested underwater sunlight
+#define UNDERWATER_RAY_SAMPLES 8 // [4 8 12] Underwater volume samples
+#define DIMENSION_STYLE 0.70 // [0.00 0.35 0.70 1.00] Amber/teal Nether and pearlescent End
+#define HANDHELD_LIGHT 0.75 // [0.00 0.40 0.75 1.00] Main and offhand local light
+#define HANDHELD_RADIUS 12.0 // [8.0 12.0 16.0] Handheld light reach in blocks
+#define SHOOTING_STAR_STRENGTH 0.65 // [0.00 0.35 0.65 1.00] Rare clear-night meteors
+#define MATERIAL_MAPS 0 // [0 1 2] Off, oldPBR RGB normals, LabPBR 1.3 XY normals
+#define NORMAL_STRENGTH 0.70 // [0.00 0.35 0.70 1.00] Resource-pack normal map intensity
+#define MATERIAL_SHINE 0.70 // [0.00 0.35 0.70 1.00] Resource-pack smoothness response
+#define AERO_MOON_PHASES // Follow the eight Minecraft moon phases
+
+#define AERO_COLORED_SHADOWS // Sunlight picks up stained-glass color
+#define CLOUD_MODE 0 // [0 1] Flat wisps or ray-marched cloud volume
+#define CLOUD_SAMPLES 8 // [8 12 20] Cloud volume integration steps
+#define STORM_WIND 0.65 // [0.00 0.35 0.65 1.00] Stronger coordinated weather gusts
+#define WATER_SURFACE_MOTION 0.65 // [0.00 0.35 0.65 1.00] Small geometric water waves
+#define COLORED_LIGHT_STRENGTH 0.50 // [0.00 0.25 0.50 0.80] Visible emissive blocks cast local color
+#define COLORED_LIGHT_SAMPLES 12 // [8 12 24] Screen-space emitter gathering quality
+#define TAA_ENABLED 0 // [0 1] Optional temporal anti-aliasing
+#define TAA_HISTORY 0.85 // [0.65 0.75 0.85 0.92] History contribution with rejection and clipping
+//#define AERO_PHOTO_MODE // Optional depth of field and cinematic framing
+#define PHOTO_AUTOFOCUS // Use smoothed center depth when photo mode is enabled
+#define PHOTO_FOCUS_DISTANCE 8.0 // [2.0 4.0 8.0 16.0 32.0 64.0] Manual focus distance in blocks
+#define PHOTO_APERTURE 0.65 // [0.00 0.35 0.65 1.00] Depth-of-field blur radius
+#define PHOTO_LETTERBOX 0.00 // [0.00 0.05 0.10 0.15] Optional top/bottom cinematic bars
 
 #define AERO_STYLE 0 // [0 1 2] Classic Aero, Tropical Aero, Soft Dream
 #define BLUE_HOUR_STRENGTH 0.70 // [0.00 0.35 0.50 0.70 1.00] Velvety azure twilight

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AeroDream preset comparison</title>
+<style>
+  :root { color-scheme: light dark; font: 16px/1.6 system-ui, sans-serif; }
+  body { max-width: 1500px; margin: auto; padding: 28px; background: #071b2b; color: #e5f8ff; }
+  h1 { font-size: clamp(28px,4vw,46px); margin-bottom: 0; }
+  p { max-width: 80ch; color: #b4d7e5; }
+  label { display: inline-block; margin: 12px 16px 12px 0; }
+  select { padding: 8px; border: 1px solid #487488; border-radius: 8px; font: inherit; background: #12374c; color: white; }
+  .grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+  figure { margin: 0; border: 1px solid #3c6075; border-radius: 14px; overflow: hidden; background: #0e293c; }
+  figcaption { padding: 12px 16px; font-weight: 600; }
+  img { display: block; width: 100%; cursor: zoom-in; }
+  .empty { min-height: 230px; padding: 28px; display: grid; place-content: center; overflow-wrap: anywhere; color: #b4d7e5; }
+  [hidden] { display: none !important; }
+  #status { min-height: 1.6em; }
+  a { color: #9ae4ff; }
+  @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
+</style>
+<h1>AeroDream preset comparison</h1>
+<p>Compare real Minecraft captures from the same viewpoint. Missing captures are marked below. Select a screenshot to view its full resolution.</p>
+<label for="scene">Scene <select id="scene">
+  <option value="noon">Noon lake</option><option value="sunset">Sunset</option>
+  <option value="rain">Rain and puddles</option><option value="underwater">Underwater</option>
+  <option value="cave">Cave and handheld light</option><option value="nether">Nether</option>
+  <option value="end">The End</option>
+</select></label>
+<p id="status" role="status" aria-live="polite"></p>
+<div class="grid" id="comparison"></div>
+<p>See <a href="VALIDATION.md">the capture and benchmark protocol</a> for consistent camera settings and frame-time measurements. No game compatibility or FPS claims are made by this viewer.</p>
+<script>
+  const scene = document.querySelector('#scene');
+  const grid = document.querySelector('#comparison');
+  let generation = 0;
+  function render() {
+    const current = ++generation;
+    grid.replaceChildren();
+    let loaded = 0;
+    let finished = 0;
+    document.querySelector('#status').textContent = 'Loading captures…';
+    for (const preset of ['performance', 'balanced', 'dream']) {
+      const path = `screenshots/${scene.value}-${preset}.png`;
+      const figure = document.createElement('figure');
+      const caption = document.createElement('figcaption');
+      caption.textContent = preset[0].toUpperCase() + preset.slice(1);
+      const link = document.createElement('a');
+      link.href = path;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.hidden = true;
+      const image = document.createElement('img');
+      image.alt = `${caption.textContent} preset — ${scene.selectedOptions[0].textContent}`;
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = `Capture pending: ${path}`;
+      function done(success) {
+        if (current !== generation) return;
+        if (success) { loaded++; link.hidden = false; empty.hidden = true; }
+        if (++finished === 3) document.querySelector('#status').textContent = `${loaded} of 3 captures available for this scene.`;
+      }
+      image.onload = () => done(true);
+      image.onerror = () => done(false);
+      link.append(image);
+      figure.append(caption, link, empty);
+      grid.append(figure);
+      image.src = path;
+    }
+  }
+  scene.addEventListener('change', render);
+  render();
+</script>
+</html>

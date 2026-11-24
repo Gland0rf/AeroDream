@@ -1,15 +1,13 @@
 #include "/lib/common.glsl"
 #include "/lib/caustics.glsl"
+#include "/lib/materials.glsl"
+#include "/lib/handlight.glsl"
+#include "/lib/shadows.glsl"
+#include "/lib/emission.glsl"
 
 uniform sampler2D gtexture;
-uniform sampler2D shadowtex0;
-uniform mat4 shadowModelView;
-uniform mat4 shadowProjection;
 uniform float wetness;
 uniform int isEyeInWater;
-#ifdef IS_IRIS
-uniform bool hasSkylight;
-#endif
 
 in vec2 vUV;
 in vec2 vLM;
@@ -23,27 +21,29 @@ flat in int vMaterial;
 #define AERO_ALPHA_CUTOFF 0.10
 #endif
 
-/* RENDERTARGETS: 0 */
+/* RENDERTARGETS: 0,1,2 */
 layout(location = 0) out vec4 fragColor;
+layout(location = 1) out vec4 surfaceData;
+layout(location = 2) out vec4 emissionData;
 
-float aeroShadow(vec3 playerPos, vec3 N, vec3 L) {
+vec3 aeroShadow(vec3 playerPos, vec3 N, vec3 L) {
 #if SHADOW_QUALITY == 0
-    return 1.0;
+    return vec3(1.0);
 #else
     vec3 offsetPos = playerPos + N * 0.035 + L * 0.06;
     vec4 clip = shadowProjection * shadowModelView * vec4(offsetPos, 1.0);
     vec3 sc = (clip.xyz / max(clip.w, 0.0001)) * 0.5 + 0.5;
-    if (min(min(sc.x, sc.y), sc.z) <= 0.001 || max(max(sc.x, sc.y), sc.z) >= 0.999) return 1.0;
+    if (!aeroInsideShadow(sc)) return vec3(1.0);
     float bias = mix(0.00024, 0.00135, 1.0 - max(dot(N, L), 0.0));
 #if SHADOW_QUALITY == 1
-    return step(sc.z - bias, texture(shadowtex0, sc.xy).r);
+    return aeroShadowSample(sc, bias);
 #else
-    float vis = 0.0;
+    vec3 vis = vec3(0.0);
     float spread = 1.35 / float(shadowMapResolution);
     for (int y = -1; y <= 1; y++) {
         for (int x = -1; x <= 1; x++) {
             vec2 offset = vec2(float(x), float(y)) * spread;
-            vis += step(sc.z - bias, texture(shadowtex0, sc.xy + offset).r);
+            vis += aeroShadowSample(vec3(sc.xy + offset, sc.z), bias);
         }
     }
     return vis / 9.0;
@@ -60,6 +60,9 @@ void main() {
     bool polished = vMaterial == 10020;
     bool icy = vMaterial == 10014;
     bool snow = vMaterial == 10023;
+    vec3 geometricNormal = normalize(vNormal);
+    // Evaluate derivatives before cutout discard, including quad edge pixels.
+    AeroMaterial mapped = aeroReadMaterial(vUV, vWorldPos, geometricNormal, texel.rgb);
 
     // Separate cutout program has 0.50 alpha by default. The explicit foliage
     // test also fixes OptiFine/older fallbacks and makes blade outlines crisp.
@@ -67,17 +70,19 @@ void main() {
     if (flora) cutoff = max(cutoff, 0.50);
     if (texel.a < cutoff) discard;
 
-    vec3 N = normalize(vNormal);
+    vec3 N = mapped.normal;
     vec3 L = aeroSunDir();
-    vec3 V = normalize(-vViewPos);
+    vec3 V = normalize(mat3(gbufferModelViewInverse) * (-vViewPos));
+    float overworld = aeroOverworld();
     float day = smoothstep(-0.14, 0.24, L.y);
+    day *= overworld;
     float skyLight = aeroSat((vLM.y - 0.03125) / 0.9375);
     float blockLight = aeroSat((vLM.x - 0.03125) / 0.9375);
     float ndl = max(dot(N, L), 0.0);
-    float shadow = 1.0;
+    vec3 shadow = vec3(1.0);
 #if SHADOW_QUALITY > 0
     if (day > 0.01 && skyLight > 0.10 && ndl > 0.005) {
-        shadow = aeroShadow(vWorldPos, N, L);
+        shadow = aeroShadow(vWorldPos, geometricNormal, L);
     }
 #endif
 
@@ -94,6 +99,7 @@ void main() {
                                    vec3(0.66, 0.76, 0.88));
     float skyFill = mix(0.32, 1.0, skyLight);
     vec3 ambient = mix(nightAmbient, blueAmbient, day) * skyFill;
+    ambient = aeroDimensionAmbient(ambient);
     if (flora || turf) ambient += vec3(0.011, 0.022, 0.006) * skyLight * day;
 
     // Cloud shadow is a moving *lighting* mask, never a black texture over
@@ -112,26 +118,32 @@ void main() {
 #endif
 
     vec3 directSun = mix(vec3(1.0, 0.52, 0.30), vec3(1.0, 0.98, 0.84), smoothstep(0.02, 0.42, L.y));
-    float sunVisibility = shadow;
+    vec3 sunVisibility = shadow;
     // Blades need some light from the opposite face even when their physical
     // shadow normal points away from the sun.
     if (flora && ndl < 0.005) {
-        sunVisibility = 0.68;
+        sunVisibility = vec3(0.68);
     }
     vec3 sunlight = directSun * (diffuse + transmitted) * (0.82 * skyLight)
                   * sunVisibility * cloudShade * day * (1.0 - rainStrength * 0.48);
     // Moonlight is a soft directional accent, not a second noon sun.
-    float night = 1.0 - day;
+    float night = (1.0 - day) * overworld;
     float moonFacing = max(dot(N, -L), 0.0);
     vec3 moonLight = vec3(0.12, 0.19, 0.32) * (0.30 + 0.70 * moonFacing)
                    * skyLight * night * NIGHT_BRIGHTNESS;
-#ifdef IS_IRIS
-    moonLight *= hasSkylight ? 1.0 : 0.0;
-#endif
     vec3 lampLight = vec3(1.0, 0.72, 0.46) * pow(blockLight, 2.25) * 0.77;
 
     vec3 base = aeroFreshGreen(texel.rgb, float(vMaterial));
-    vec3 rgb = base * (ambient + sunlight + moonLight + lampLight);
+    vec3 lighting = ambient + sunlight + moonLight + lampLight + aeroHandLight(vViewPos, N);
+    vec3 rgb = base * lighting * mapped.ao * (1.0 - mapped.metal * 0.78);
+#if MATERIAL_MAPS > 0
+    rgb += aeroMaterialHighlight(mapped, V, L) * directSun * day * shadow * cloudShade * skyLight;
+    vec3 reflected = aeroSky(reflect(-V, N), L, frameTimeCounter);
+    vec3 fresnel = mapped.f0 + (1.0 - mapped.f0) * pow(1.0 - aeroSat(dot(N, V)), 5.0);
+    rgb += reflected * fresnel * mapped.smoothness * mapped.smoothness * MATERIAL_SHINE
+         * max(skyLight * overworld, mapped.metal * 0.18);
+    rgb = mix(rgb, max(rgb, base * 2.5), mapped.emission);
+#endif
     // Snow keeps a clean icy-blue ambient tint; highlights stay white.
     if (snow && CRYSTAL_ICE > 0.001) {
         float air = skyLight * (0.55 + 0.45 * day);
@@ -141,8 +153,8 @@ void main() {
     // Post-rain gloss: only surfaces open to the sky, mostly upward facing.
     // Material sheen also helps polished stone and ice when the world is dry.
     float exposed = smoothstep(0.14, 0.78, skyLight);
-    float upward = smoothstep(-0.13, 0.78, N.y);
-    float wetSurface = wetness * WET_GLOSS * exposed * upward;
+    float upward = smoothstep(-0.13, 0.78, geometricNormal.y);
+    float wetSurface = wetness * WET_GLOSS * exposed * upward * aeroLocalRain();
     wetSurface *= flora ? 0.24 : 1.0;
     if (isEyeInWater != 0) wetSurface = 0.0;
     float materialShine = SURFACE_SHEEN * (polished ? 0.36 : (icy ? 0.50 : 0.0));
@@ -203,7 +215,9 @@ void main() {
              * (1.0 - rainStrength * 0.85) * (1.5 + 0.7 * aeroMorning());
     }
 
-    if (vMaterial == 10016) rgb = max(rgb, base * 1.85);
+    vec3 emitted = aeroBlockEmission(vMaterial, base);
+    if (max(max(emitted.r, emitted.g), emitted.b) > 0.0) rgb = max(rgb, base * 1.85);
+    emitted += base * mapped.emission;
 
     // Underwater camera: project the animated light net onto visible seabeds.
     // Above-water caustics are separately applied in gbuffers_water.fsh.
@@ -216,5 +230,21 @@ void main() {
              * caustic * sunThroughWater * CAUSTIC_STRENGTH;
     }
 
+    // Only terrain can collect pools. Snow, ice, plants and emissive blocks
+    // retain their own material response; the deferred pass sees opaque depth.
+    float puddle = 0.0;
+#if PUDDLE_QUALITY > 0 && defined(AERO_TERRAIN)
+    if (!flora && !snow && !icy && dot(emitted, emitted) < 0.001 && isEyeInWater == 0) {
+        vec2 worldXZ = (vWorldPos + cameraPosition).xz;
+        float basin = aeroNoise(worldXZ * 0.31) * 0.72
+                    + aeroNoise(worldXZ * 1.13) * 0.28;
+        float threshold = mix(0.86, 0.42, aeroSat(wetness));
+        puddle = smoothstep(threshold, threshold + 0.10, basin) * wetness
+               * PUDDLE_STRENGTH * smoothstep(0.94, 0.995, geometricNormal.y)
+               * smoothstep(0.94, 0.99, skyLight) * aeroLocalRain();
+    }
+#endif
     fragColor = vec4(max(rgb, vec3(0.0)), texel.a);
+    surfaceData = vec4(geometricNormal * 0.5 + 0.5, puddle);
+    emissionData = vec4(emitted, 1.0);
 }

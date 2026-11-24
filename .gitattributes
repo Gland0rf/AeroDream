@@ -5,3 +5,12 @@
 *.tes text linguist-language=glsl
 *.fsh text linguist-language=glsl
 *.csh text linguist-language=glsl
+*.glsl text eol=lf
+*.vsh text eol=lf
+*.fsh text eol=lf
+*.properties text eol=lf
+*.lang text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.html text eol=lf
